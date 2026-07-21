@@ -44,7 +44,6 @@ const App = () => (
         <HelmetProvider>
         <BrowserRouter>
           <AuthProvider>
-            <NotificationProvider>
               <ChatProvider>
               <SupportChatProvider>
                   <Suspense fallback={<PageLoader />}>
@@ -82,7 +81,6 @@ const App = () => (
                 </Suspense>
               </SupportChatProvider>
               </ChatProvider>
-            </NotificationProvider>
           </AuthProvider>
         </BrowserRouter>
       </HelmetProvider>
