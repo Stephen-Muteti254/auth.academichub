@@ -44,11 +44,9 @@ const App = () => (
         <HelmetProvider>
         <BrowserRouter>
           <AuthProvider>
-            <ProfileProvider>
             <NotificationProvider>
               <ChatProvider>
               <SupportChatProvider>
-                <ProfileModalProvider>
                   <Suspense fallback={<PageLoader />}>
                   <Routes>
                     {/* ================= PUBLIC ================= */}
@@ -82,11 +80,9 @@ const App = () => (
 
                   </Routes>
                 </Suspense>
-                </ProfileModalProvider>
               </SupportChatProvider>
               </ChatProvider>
             </NotificationProvider>
-            </ProfileProvider>
           </AuthProvider>
         </BrowserRouter>
       </HelmetProvider>
