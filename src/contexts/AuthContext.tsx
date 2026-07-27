@@ -6,7 +6,6 @@ interface User { /* same as your type */ id: number; full_name: string; email: s
 
 interface AuthContextType {
   user: User | null;
-  accessToken: string | null;
   isLoading: boolean;
   login: (user: User, token: string, remember?: boolean) => void;
   logout: () => void;
@@ -24,20 +23,17 @@ interface AuthProviderProps { children: ReactNode; }
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
-  const [accessToken, setAccessToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
   // helper to clear
   const clearStorage = () => {
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('user');
-    sessionStorage.removeItem('access_token');
-    sessionStorage.removeItem('user');
+
+    localStorage.removeItem("user");
+    sessionStorage.removeItem("user");
     setUser(null);
-    setAccessToken(null);
-    delete api.defaults.headers.common['Authorization'];
-  };
+
+};
 
   // robust validator: only clear on explicit 401/403 or explicit invalid token response
   const validateTokenWithBackend = async (): Promise<boolean> => {
@@ -70,40 +66,37 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   useEffect(() => {
     let cancelled = false;
 
-    const loadAuthState = async () => {
-      const storedToken =
-        localStorage.getItem('access_token') || sessionStorage.getItem('access_token');
-      const storedUser =
-        localStorage.getItem('user') || sessionStorage.getItem('user');
-
-      if (storedToken) {
-        api.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
+    async function loadAuth() {
 
         try {
-          const isValid = await validateTokenWithBackend();
-          if (!cancelled) {
-            if (isValid) {
-              setAccessToken(storedToken);
-            } else {
-              clearStorage();
+
+            const response = await api.get("/auth/me");
+
+            if (!cancelled) {
+                setUser(response.data);
             }
-          }
+
         } catch {
-          if (!cancelled) clearStorage();
+
+            if (!cancelled) {
+                clearStorage();
+            }
+
+        } finally {
+
+            if (!cancelled) {
+                setIsLoading(false);
+            }
+
         }
-      }
- else {
-        clearStorage();
-      }
+    }
 
-      if (!cancelled) setIsLoading(false);
-    };
-
-    loadAuthState();
+    loadAuth();
 
     return () => {
-      cancelled = true;
+        cancelled = true;
     };
+
   }, []);
 
 
@@ -113,19 +106,14 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     return validateTokenWithBackend();
   };
 
-  const login = (userObj: User, token: string, remember = true) => {
+  const login = (userObj: User) => {
     setUser(userObj);
-    setAccessToken(token);
-    api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    localStorage.setItem(
+        "user",
+        JSON.stringify(userObj)
+    );
 
-    if (remember) {
-      localStorage.setItem('access_token', token);
-      localStorage.setItem('user', JSON.stringify(userObj));
-    } else {
-      sessionStorage.setItem('access_token', token);
-      sessionStorage.setItem('user', JSON.stringify(userObj));
-    }
-  };
+};
 
   const logout = () => {
     // Ideally call backend logout endpoint if needed
@@ -135,7 +123,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const value: AuthContextType = {
     user,
-    accessToken,
     isLoading,
     login,
     logout,

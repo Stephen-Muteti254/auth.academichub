@@ -13,8 +13,6 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import api from "@/lib/api";
 import { useAuth } from "@/contexts/AuthContext";
-// import LightLogo from "@/assets/light-mini-logo.PNG";
-// import DarkLogo from "@/assets/dark-mini-logo.PNG";
 import { Eye, EyeOff } from "lucide-react";
 import { Helmet } from "react-helmet-async";
 
@@ -86,9 +84,9 @@ const Login = () => {
         otp_session_id: otpSessionId,
       });
 
-      const { access_token, refresh_token, user } = data;
-
-      login(user, access_token);
+      const { user } = data;
+      
+      login(user);
 
       if (refresh_token) {
         localStorage.setItem("refresh_token", refresh_token);

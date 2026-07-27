@@ -11,7 +11,7 @@ interface PublicLayoutProps {
   children: React.ReactNode;
 }
 
-export const PublicLayout = ({ children }: PublicLayoutProps) => {
+export const AuthLayout = ({ children }: PublicLayoutProps) => {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -43,12 +43,6 @@ export const PublicLayout = ({ children }: PublicLayoutProps) => {
     return () => clearInterval(checkTawk);
   }, [location.pathname]);
 
-  const navigation = [
-    { name: "Home", href: "/" },
-    { name: "About", href: "/about" },
-    { name: "Contact", href: "/contact" },
-  ];
-
   const isActive = (path: string) => location.pathname === path;
 
   return (
@@ -71,27 +65,10 @@ export const PublicLayout = ({ children }: PublicLayoutProps) => {
               />
             </Link>
 
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-8">
-              {navigation.map((item) => (
-                <Link
-                  key={item.name}
-                  to={item.href}
-                  className={`text-sm font-medium transition-colors hover:text-primary ${
-                    isActive(item.href)
-                      ? "text-primary"
-                      : "text-muted-foreground"
-                  }`}
-                >
-                  {item.name}
-                </Link>
-              ))}
-            </div>
-
             {/* Auth Buttons */}
             <div className="hidden md:flex items-center space-x-4">
               <Button variant="ghost" asChild>
-                <Link to="/login">Login</Link>
+                <Link to="/">Login</Link>
               </Button>
               <Button asChild>
                 <Link to="/register">Get Started</Link>
@@ -149,67 +126,6 @@ export const PublicLayout = ({ children }: PublicLayoutProps) => {
 
       {/* Main Content */}
       <main><Outlet /></main>
-
-      {/* Footer */}
-      <footer className="border-t border-border bg-card mt-auto">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div className="col-span-1 md:col-span-2">
-              <div className="flex items-center space-x-2 mb-4">
-                <img 
-                src={LightLogo} 
-                alt="AcademicHub" 
-                className="w-auto h-8 block dark:hidden" 
-              />
-              <img 
-                src={DarkLogo} 
-                alt="AcademicHub" 
-                className="w-auto h-8 hidden dark:block" 
-              />
-              </div>
-              <p className="text-sm text-muted-foreground max-w-md">
-                Connecting clients with expert writers for high-quality academic work. 
-                Professional, reliable, and efficient.
-              </p>
-            </div>
-            <div>
-              <h3 className="font-semibold mb-4">Company</h3>
-              <ul className="space-y-2">
-                <li>
-                  <Link to="/about" className="text-sm text-muted-foreground hover:text-primary">
-                    About
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/contact" className="text-sm text-muted-foreground hover:text-primary">
-                    Contact
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-semibold mb-4">Legal</h3>
-              <ul className="space-y-2">
-                <li>
-                  <Link to="/privacy" className="text-sm text-muted-foreground hover:text-primary">
-                    Privacy Policy
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/terms" className="text-sm text-muted-foreground hover:text-primary">
-                    Terms & Conditions
-                  </Link>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div className="mt-8 pt-8 border-t border-border">
-            <p className="text-sm text-muted-foreground text-center">
-              © {new Date().getFullYear()} AcademicHub. All rights reserved.
-            </p>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 };

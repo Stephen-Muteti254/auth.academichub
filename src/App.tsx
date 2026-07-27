@@ -5,7 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
-import { PublicLayout } from "./components/PublicLayout";
+import { AuthLayout } from "./components/AuthLayout";
 import NotFound from "./pages/NotFound";
 import RegisterClient from "./pages/RegisterClient";
 import RegisterWriter from "./pages/RegisterWriter";
@@ -49,7 +49,7 @@ const App = () => (
                   <Suspense fallback={<PageLoader />}>
                   <Routes>
                     {/* ================= PUBLIC ================= */}
-                    <Route element={<PublicLayout />}>
+                    <Route element={<AuthLayout />}>
                       <Route element={<GuestGuard />}>
                         <Route index element={<Lazy.Login />} />
                         <Route path="register" element={<Lazy.Register />} />

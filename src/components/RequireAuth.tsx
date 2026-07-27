@@ -8,7 +8,7 @@ interface RequireAuthProps {
 }
 
 export const RequireAuth = ({ requiredRole }: RequireAuthProps) => {
-  const { user, accessToken, isLoading } = useAuth();
+  const { user, isLoading } = useAuth();
   const location = useLocation();
 
   const ROLE_HIERARCHY = {
@@ -28,7 +28,7 @@ export const RequireAuth = ({ requiredRole }: RequireAuthProps) => {
   }
 
   // 2. Then check auth existence
-  if (!accessToken || !user) {
+  if (!user) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
