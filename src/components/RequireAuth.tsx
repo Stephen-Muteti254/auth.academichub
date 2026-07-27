@@ -29,7 +29,7 @@ export const RequireAuth = ({ requiredRole }: RequireAuthProps) => {
 
   // 2. Then check auth existence
   if (!user) {
-    return <Navigate to="/login" state={{ from: location }} replace />;
+    return <Navigate to="/" state={{ from: location }} replace />;
   }
 
   // 3. THEN safely use user.role
